@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+
+<?php
+
+require_once __DIR__ . '/../bootstrap/app.php';
+
+use App\Console\Commands\BoredAPI\PrivateActivityCommand;
+use App\Console\Commands\BoredAPI\PublicActivityCommand;
+use Symfony\Component\Console\Application;
+
+$app = new Application;
+
+try {
+    $app->add(new PrivateActivityCommand);
+    $app->add(new PublicActivityCommand);
+    $app->run();
+} catch (Exception $e) {
+}
