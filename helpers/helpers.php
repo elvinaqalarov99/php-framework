@@ -2,7 +2,9 @@
 
 if (!function_exists('config')) {
     function config(string $config = null){
-        define('CONFIG', require '../config/app.php');
+        if (!defined('CONFIG')) {
+            define('CONFIG', require '../config/app.php');
+        }
 
         if (is_null($config)) {
             return CONFIG;

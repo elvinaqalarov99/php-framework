@@ -8,8 +8,7 @@ use GO\Scheduler;
 $scheduler = new Scheduler();
 
 // configure the scheduled jobs
-$scheduler->raw('bin/console public-activity', [], 'public-activity')->daily();
-$scheduler->raw('bin/console private-activity', [], 'private-activity')->daily();
+$scheduler->raw('bin/console example', [], 'example')->daily();
 
 // Let the scheduler execute jobs which are due.
 $scheduler->run();

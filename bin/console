@@ -4,15 +4,13 @@
 
 require_once __DIR__ . '/../bootstrap/app.php';
 
-use App\Console\Commands\BoredAPI\PrivateActivityCommand;
-use App\Console\Commands\BoredAPI\PublicActivityCommand;
+use App\Console\Commands\ExampleCommand;
 use Symfony\Component\Console\Application;
 
 $app = new Application;
 
 try {
-    $app->add(new PrivateActivityCommand);
-    $app->add(new PublicActivityCommand);
+    $app->add(new ExampleCommand);
     $app->run();
 } catch (Exception $e) {
 }

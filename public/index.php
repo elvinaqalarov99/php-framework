@@ -6,12 +6,13 @@ use App\Core\Application;
 
 $app = new Application;
 
-$app->router->get('/', function (...$args) {
-    return 'Hello World';
-});
+// routes for handling web requests
+require_once '../routes/web.php';
 
-$app->router->get('/users', function (...$args) {
-    return 'Hello Users';
-});
+// routes for handling api requests
+require_once '../routes/api.php';
 
-echo $app->run();
+try {
+    echo $app->run();
+} catch (Exception $e) {
+}

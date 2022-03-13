@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use Exception;
+
 class Router
 {
     /**
@@ -15,19 +17,26 @@ class Router
     protected Request $request;
 
     /**
-     * @param Request $request
+     * @var Response $response
      */
-    public function __construct(Request $request)
+    protected Response $response;
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     */
+    public function __construct(Request $request, Response $response)
     {
-        $this->request = $request;
+        $this->request  = $request;
+        $this->response = $response;
     }
 
     /**
      * @param string $path
-     * @param callable $callback
+     * @param mixed $callback
      * @return void
      */
-    public function get(string $path, callable $callback): void
+    public function get(string $path, mixed $callback): void
     {
         $this->routes['get'][$path] = $callback;
     }
@@ -44,19 +53,28 @@ class Router
 
     /**
      * @return string
+     * @throws Exception
      */
     public function resolve(): string
     {
-        $path = $this->request->getPath();
-        $method = $this->request->getMethod();
+        try {
+            $path = $this->request->getPath();
+            $method = $this->request->getMethod();
 
-        $args = $method === 'GET' ? $_GET : $_POST;
-        $callback = $this->routes[$method][$path] ?? false;
+            $callback = $this->routes[$method][$path] ?? false;
 
-        if (!$callback) {
-            return 'Not found';
+            if (!$callback) {
+                $this->response->setStatusCode(404);
+                return 'Not found';
+            }
+
+            if (is_array($callback)) {
+                $callback[0] = new $callback[0];
+            }
+
+            return call_user_func_array($callback, []);
+        } catch (Exception $e) {
+            return $e->getMessage();
         }
-
-        return $callback($args);
     }
 }

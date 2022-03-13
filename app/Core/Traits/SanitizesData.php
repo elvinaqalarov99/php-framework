@@ -2,13 +2,15 @@
 
 namespace App\Core\Traits;
 
+use JetBrains\PhpStorm\ArrayShape;
+
 trait SanitizesData
 {
     /**
      * @param array $data
      * @return void
      */
-    public function sanitizeData(array &$data = []): void
+    protected function sanitizeData(array &$data = []): void
     {
         foreach ($data as $column => $value) {
             if (empty($value)) {
@@ -25,7 +27,7 @@ trait SanitizesData
      * @param array $data
      * @return array
      */
-    public function filterData(array &$data = []): array
+    protected function filterData(array &$data = []): array
     {
         foreach ($data as $column => $value) {
             if (!in_array($column, $this->fillable, true)) {
@@ -42,7 +44,8 @@ trait SanitizesData
      * @param $data
      * @return array
      */
-    public function prepareData($data): array
+    #[ArrayShape(['columns' => "string", 'prepare' => "string", 'values' => "array"])]
+    protected function prepareData($data): array
     {
         $columns = implode(',', array_keys($data)) ?? '';
         $values  = array_values($data) ?? [];

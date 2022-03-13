@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Core\Database;
 use App\Core\Traits\SanitizesData;
+use JsonException;
 
 class BaseModel implements IBaseModel
 {
@@ -20,13 +21,14 @@ class BaseModel implements IBaseModel
 
     /**
      * @param string $columns
-     * @return array
+     * @return string
+     * @throws JsonException
      */
-    public function list(string $columns = '*'): array
+    public function list(string $columns = '*'): string
     {
         $query = $this->db->query("SELECT $columns FROM $this->table WHERE deleted_at IS NULL");
 
-        return $query->fetchAll();
+        return json_encode($query->fetchAll(), JSON_THROW_ON_ERROR);
     }
 
     /**

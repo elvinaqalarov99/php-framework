@@ -18,9 +18,9 @@ class Database
     protected mysqli $connection;
 
     /**
-     * @var mysqli_stmt $query
+     * @var mysqli_stmt|bool $query
      */
-    protected mysqli_stmt $query;
+    protected mysqli_stmt|bool $query;
 
     /**
      * @var bool $show_errors
