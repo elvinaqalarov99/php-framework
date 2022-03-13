@@ -4,7 +4,7 @@ namespace App\Core\Traits;
 
 use JetBrains\PhpStorm\ArrayShape;
 
-trait SanitizesData
+trait HandlesData
 {
     /**
      * @param array $data

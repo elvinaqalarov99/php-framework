@@ -10,3 +10,4 @@ $app->router->get('/api', function () {
 });
 
 $app->router->get('/api/activities', [ActivityController::class, 'index']);
+$app->router->get('/api/activities/{id}', [ActivityController::class, 'show']);

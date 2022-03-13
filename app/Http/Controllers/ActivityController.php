@@ -21,4 +21,14 @@ class ActivityController extends BaseController
     {
         return $this->model->list('id,activity,type,participants');
     }
+
+    /**
+     * @param int $id
+     * @return string
+     * @throws JsonException
+     */
+    public function show(int $id): string
+    {
+        return $this->model->getById($id, 'id,activity,type,participants');
+    }
 }

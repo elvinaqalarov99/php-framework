@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Core\Database;
-use App\Core\Traits\SanitizesData;
+use App\Core\Traits\HandlesData;
 use JsonException;
 
 class BaseModel implements IBaseModel
 {
-    use SanitizesData;
+    use HandlesData;
 
     protected Database $db;
     protected string $table = '';
@@ -43,5 +43,18 @@ class BaseModel implements IBaseModel
         $prepared = $this->prepareData($data);
 
         $this->db->query("INSERT INTO $this->table ({$prepared['columns']}) VALUES ({$prepared['prepare']})", ...$prepared['values']);
+    }
+
+    /**
+     * @param int $id
+     * @param string $columns
+     * @return bool|string
+     * @throws JsonException
+     */
+    public function getById(int $id, string $columns = '*'): bool|string
+    {
+        $query = $this->db->query("SELECT $columns FROM $this->table WHERE id = ? AND deleted_at IS NULL", $id);
+
+        return json_encode($query->fetchArray(), JSON_THROW_ON_ERROR);
     }
 }

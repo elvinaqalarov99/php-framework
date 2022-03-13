@@ -61,6 +61,8 @@ class Router
             $path = $this->request->getPath();
             $method = $this->request->getMethod();
 
+            $args = [$this->request->resolveId()];
+
             $callback = $this->routes[$method][$path] ?? false;
 
             if (!$callback) {
@@ -72,7 +74,7 @@ class Router
                 $callback[0] = new $callback[0];
             }
 
-            return call_user_func_array($callback, []);
+            return call_user_func_array($callback, $args);
         } catch (Exception $e) {
             return $e->getMessage();
         }

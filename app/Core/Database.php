@@ -202,7 +202,8 @@ class Database
     /**
      * @return mixed
      */
-    public function numRows() {
+    public function numRows(): mixed
+    {
         $this->query->store_result();
 
         return $this->query->num_rows;
@@ -211,14 +212,16 @@ class Database
     /**
      * @return mixed
      */
-    public function affectedRows() {
+    public function affectedRows(): mixed
+    {
         return $this->query->affected_rows;
     }
 
     /**
      * @return mixed
      */
-    public function lastInsertID() {
+    public function lastInsertID(): mixed
+    {
         return $this->connection->insert_id;
     }
 
@@ -239,18 +242,11 @@ class Database
      */
     private function _gettype($var): string
     {
-        if (is_string($var)) {
-            return 's';
-        }
-
-        if (is_float($var)) {
-            return 'd';
-        }
-
-        if (is_int($var)) {
-            return 'i';
-        }
-
-        return 'b';
+        return match (gettype($var)) {
+            'string'  => 's',
+            'double'  => 'd',
+            'integer' => 'i',
+            default   => 'b'
+        };
     }
 }

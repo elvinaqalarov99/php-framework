@@ -7,20 +7,41 @@ use JetBrains\PhpStorm\Pure;
 class Request
 {
     /**
-     * @return false|mixed|string
+     * @return string|array|bool|int
      */
-    public function getPath(): mixed
+    public function getPath(): string|array|bool|int
     {
-        $uri = $_SERVER['REQUEST_URI'] ?? '/';
-        $path = str_ends_with($uri, '/') && strlen($uri) > 1 ? rtrim($uri, '/') : $uri;
+        $uri = $this->parseUrl();
 
-        $position = strpos($path, '?');
+        $arg = isset($uri[3]) ? '{id}' : '';
 
-        if ($position === false) {
-            return $path;
+        $path = '/' . ($uri[1] === 'api' ? $uri[1] . (isset($uri[2]) ? "/$uri[2]" : '') : $uri[1]);
+
+        if (!empty($arg)) {
+            $path .= "/$arg";
         }
 
-        return substr($path, 0, $position);
+        return $path;
+    }
+
+    /**
+     * @return string|null
+     */
+    #[Pure] public function resolveId(): ?string
+    {
+        $uri = $this->parseUrl();
+
+        return isset($uri[3]) ? (int) $uri[3] : 0;
+    }
+
+    /**
+     * @return array
+     */
+    public function parseUrl(): array
+    {
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '/';
+
+        return explode('/', $uri);
     }
 
     /**
@@ -57,10 +78,9 @@ class Request
     }
 
     /**
-     * @param $key
      * @return array|null
      */
-    #[Pure] public function all($key): array|null
+    #[Pure] public function all(): array|null
     {
         return $this->getData();
     }
