@@ -43,9 +43,9 @@ class Router
     }
 
     /**
-     * @return void
+     * @return string
      */
-    public function resolve(): void
+    public function resolve(): string
     {
         $path = $this->request->getPath();
         $method = $this->request->getMethod();
@@ -54,10 +54,9 @@ class Router
         $callback = $this->routes[$method][$path] ?? false;
 
         if (!$callback) {
-            echo 'Not found';
-            exit;
+            return 'Not found';
         }
 
-        echo $callback($args);
+        return $callback($args);
     }
 }

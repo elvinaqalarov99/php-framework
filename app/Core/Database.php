@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Database;
+namespace App\Core;
 
-use mysqli_stmt;
 use mysqli;
+use mysqli_stmt;
 
-class DB
+class Database
 {
     /**
-     * @var DB|null $instance
+     * @var Database|null $instance
      */
-    private static ?DB $instance = null;
+    private static ?Database $instance = null;
 
     /**
      * @var mysqli $connection
@@ -58,16 +58,16 @@ class DB
 
     // The object is created from within the class itself
     // only if the class has no instance.
-    public static function getInstance(): ?DB
+    public static function getInstance(): ?Database
     {
         if (self::$instance === null)
         {
-            $db_host = $_ENV['DB_HOST'];
-            $db_user = $_ENV['DB_USER'];
-            $db_pass = $_ENV['DB_PASSWORD'];
-            $db_name = $_ENV['DB_NAME'];
+            $db_host = config('database.host');
+            $db_user = config('database.user');
+            $db_pass = config('database.password');
+            $db_name = config('database.name');
 
-            self::$instance = new DB($db_host, $db_user, $db_pass, $db_name);
+            self::$instance = new Database($db_host, $db_user, $db_pass, $db_name);
         }
 
         return self::$instance;
@@ -77,7 +77,7 @@ class DB
      * @param $query
      * @return $this
      */
-    public function query($query): DB
+    public function query($query): Database
     {
         if (!$this->query_closed) {
             $this->query->close();
@@ -239,9 +239,17 @@ class DB
      */
     private function _gettype($var): string
     {
-        if (is_string($var)) return 's';
-        if (is_float($var)) return 'd';
-        if (is_int($var)) return 'i';
+        if (is_string($var)) {
+            return 's';
+        }
+
+        if (is_float($var)) {
+            return 'd';
+        }
+
+        if (is_int($var)) {
+            return 'i';
+        }
 
         return 'b';
     }

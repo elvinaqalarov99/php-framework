@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use JetBrains\PhpStorm\Pure;
+
 class Application
 {
     /**
@@ -14,17 +16,17 @@ class Application
      */
     public Request $request;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->request = new Request;
         $this->router = new Router($this->request);
     }
 
     /**
-     * @return void
+     * @return string
      */
-    public function run(): void
+    public function run(): string
     {
-        $this->router->resolve();
+        return $this->router->resolve();
     }
 }

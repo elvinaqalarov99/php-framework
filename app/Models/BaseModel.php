@@ -2,20 +2,20 @@
 
 namespace App\Models;
 
-use App\Database\DB;
-use App\Database\SanitizesData;
+use App\Core\Database;
+use App\Core\Traits\SanitizesData;
 
 class BaseModel implements IBaseModel
 {
     use SanitizesData;
 
-    protected DB $db;
+    protected Database $db;
     protected string $table = '';
     protected array $fillable = [];
 
     public function __construct()
     {
-        $this->db = DB::getInstance();
+        $this->db = Database::getInstance();
     }
 
     /**

@@ -7,7 +7,7 @@ class Request
     /**
      * @return false|mixed|string
      */
-    public function getPath()
+    public function getPath(): mixed
     {
         $uri = $_SERVER['REQUEST_URI'] ?? '/';
         $path = str_ends_with($uri, '/') && strlen($uri) > 1 ? rtrim($uri, '/') : $uri;
