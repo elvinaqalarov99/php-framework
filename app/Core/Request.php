@@ -7,27 +7,27 @@ use JetBrains\PhpStorm\Pure;
 class Request
 {
     /**
-     * @return string|array|bool|int
+     * @return string
      */
-    public function getPath(): string|array|bool|int
+    public function getPath(): string
     {
         $uri = $this->parseUrl();
 
-        $arg = isset($uri[3]) ? '{id}' : '';
+        $id = isset($uri[3]) ? '{id}' : '';
 
         $path = '/' . ($uri[1] === 'api' ? $uri[1] . (isset($uri[2]) ? "/$uri[2]" : '') : $uri[1]);
 
-        if (!empty($arg)) {
-            $path .= "/$arg";
+        if (!empty($id)) {
+            $path .= "/$id";
         }
 
         return $path;
     }
 
     /**
-     * @return string|null
+     * @return string
      */
-    #[Pure] public function resolveId(): ?string
+    #[Pure] public function resolveId(): string
     {
         $uri = $this->parseUrl();
 
